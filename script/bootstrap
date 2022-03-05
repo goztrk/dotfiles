@@ -1,0 +1,149 @@
+#!/usr/bin/env bash
+#
+# Bootstrap .dotfiles to determine what and how to install
+
+# Colors
+NC='\033[0m'
+C_BLACK='\033[0;30m'
+C_RED='\033[0;31m'
+C_GREEN='\033[0;32m'
+C_BROWN='\033[0;33m'
+C_BLUE='\033[0;34m'
+
+cd "$(dirname "$0")/.."
+DOTFILES_ROOT=$(pwd -P)
+
+# Exit if there is an error
+set -e
+
+# Print empty
+echo ''
+
+info () {
+  printf "\r  [ ${C_BLUE}..${NC} ] $1\n"
+}
+
+user () {
+  printf "\r  [ ${C_BROWN}??${NC} ] $1\n"
+}
+
+success () {
+  printf "\r\033[2K  [ ${C_GREEN}OK${NC} ] $1\n"
+}
+
+fail () {
+  printf "\r\033[2K  [${C_RED}FAIL${NC}] $1\n"
+  echo ''
+  exit
+}
+
+printf "${C_BROWN}Dotfiles automator${NC}\n"
+echo ''
+user 'Do you have sudo access?'
+select yn in "Yes" "No"; do
+  case $yn in
+    Yes ) ISSUDO=true; break;;
+    No ) ISSUDO=false; break;;
+    Exit ) exit;;
+  esac
+done
+
+
+###
+# Package checking
+#
+# We need to determine if required packages are installed or not
+
+declare -a REQUIRED_PACKAGES=("git" "curl" "make" "python3" "python3-dev" "python3-venv")
+
+info 'Checking required packages...'
+
+for pkg in ${REQUIRED_PACKAGES[@]}; do
+  if dpkg --get-selections | grep -q "^$pkg[[:space:]]*install$" >/dev/null; then
+    success "$pkg is installed."
+  else
+    if $ISSUDO; then
+      apt-get install -qq $pkg
+    else
+      fail "$pkg is not installed"
+      exit
+    fi
+  fi
+done
+
+success 'All necessary packages installed'
+echo ''
+
+###
+# Install ZSH
+
+if ! command -v zsh &> /dev/null; then
+  if $ISSUDO; then
+    apt-get install -qq zsh
+  else
+    ZSH_INSTALL_DIR=$HOME/.services/zsh
+    # get ncurses
+    mkdir $HOME/tmp; cd $HOME/tmp
+    wget https://ftp.gnu.org/pub/gnu/ncurses/ncurses-6.3.tar.gz
+    tar -xf ncurses-6.3.tar.gz
+    cd ncurses-6.3
+
+    # Set cflags and c++ flags to compile with Position Independent Code enabled which we need for compiling zsh
+    export CXXFLAGS=' -fPIC'
+    export CFLAGS=' -fPIC'
+
+    ./configure --prefix=$ZSH_INSTALL_DIR --enable-shared
+    make
+    make install
+    cd ..
+
+    # Tell environment where ncurses is
+    INSTALL_PATH="$ZSH_INSTALL_DIR"
+    export PATH=$INSTALL_PATH/bin:$PATH
+    export LD_LIBRARY_PATH=$INSTALL_PATH/lib:$LD_LIBRARY_PATH
+    export CFLAGS=-I$INSTALL_PATH/include
+    export CPPFLAGS="-I$INSTALL_PATH/include" LDFLAGS="-L$INSTALL_PATH/lib"
+
+    # Zsh
+    # Get zsh
+    git clone https://github.com/zsh-users/zsh.git
+
+    # Move into root zsh source directory
+    cd zsh
+
+    # Produce config.h.in, needed to produce config.status from ./configure
+    autoheader
+
+    # Produce the configure file from aclocal.m4 and configure.ac
+    autoconf
+
+    # Produce Makefile and config.h via config.status
+    ./configure --prefix=$ZSH_INSTALL_DIR --enable-shared
+
+    make
+    make install
+
+    cd $DOTFILES_ROOT
+
+    # delete tmp folder
+    rm -rf $HOME/tmp
+  fi
+fi
+
+##
+# Oh My ZSH
+if [ ! -d $HOME/.oh-my-zsh ]; then
+  sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+fi
+
+##
+# Install Node Version Manager (nvm)
+if [ ! -d $HOME/.nvm ]; then
+  wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+  source ~/.zshrc
+  nvm install --lts
+fi
+
+##
+# Neovim
+
