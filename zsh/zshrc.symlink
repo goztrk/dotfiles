@@ -27,6 +27,12 @@ do
 	source $file
 done
 
+# Load the nvim if its installed without sudo support
+if [ -d $HOME/.programs/nvim-linux64 ]
+then
+  export PATH="$HOME/.programs/nvim-linux64/bin:$PATH"
+fi
+
 # load everything but the path and completion files
 for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}
 do
