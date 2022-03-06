@@ -1,0 +1,68 @@
+# Set prefix key (default is C-b)
+unbind C-b
+set -g prefix C-Space
+bind Space send-prefix
+
+# Improve colors
+set-option -g default-terminal 'tmux-256color'
+set-option -as terminal-overrides '.xterm*:Tc:sitm=\E[3m'
+
+# set history limit to go back
+set-option -g history-limit 4096
+
+# Don't wait for an escape sequence after seeing C-Space.
+set -s escape-time 0
+
+# set style of tmux
+tm_session_name="#[fg=yellow,bold,italics]#S §"
+tm_date="#[fg=magenta]%R"
+tm_host="#[fg=yellow,bold,italics]#h"
+set -g status-style 'bg=#373b41,fg=white,bold,italics'
+set -g status-left-length 40
+set -g status-left "$tm_session_name "
+set -g status-right " $tm_host $tm_date "
+set -g status-interval 60 # Default is 15.
+
+# Highlight active window.
+set -w -g window-status-current-style bg=red
+
+# Dynamically update iTerm tab and window titles.
+set -g set-titles on
+
+# #T      = standard window title (last command, see ~/.bash_profile)
+# #h      = short hostname
+# #S      = session name
+# #W      = tmux window name
+#
+# (Would love to include #(pwd) here as well, but that would only print the
+# current working directory relative to the session -- ie. always the starting
+# cwd -- which is not very interesting).
+set -g set-titles-string "#T : #h > #S > #W"
+
+# Show bells in window titles.
+set -g window-status-bell-style fg=yellow,bold,underscore
+
+# Turn off distracting border highlight: the background highlighting is probably
+# enough. Default value of 8 comes from "pane-border-fg" in tmux's
+# options-table.c.
+set -ga pane-active-border-style bg=default,fg=default
+
+# But don't change tmux's own window titles.
+set -w -g automatic-rename off
+
+# Automatically renumber window numbers on closing a pane (tmux >= 1.7).
+set -g renumber-windows oN
+
+##
+# TMUX Plugin Manager
+# See: https://github.com/tmux-plugins/tpm
+
+# List of plugins - `<prefix> + I` to install plugins
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-sensible'
+set -g @plugin 'tmux-plugins/tmux-pain-control'
+set -g @plugin 'tmux-plugins/tmux-resurrect'
+
+
+# Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
+run -b '~/.tmux/plugins/tpm/tpm'
