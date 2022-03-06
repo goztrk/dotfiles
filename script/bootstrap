@@ -40,7 +40,8 @@ fail () {
 printf "${C_BROWN}Dotfiles automator${NC}\n"
 echo ''
 user 'Do you have sudo access?'
-select yn in "Yes" "No"; do
+select yn in "Yes" "No"
+do
   case $yn in
     Yes ) ISSUDO=true; break;;
     No ) ISSUDO=false; break;;
@@ -58,11 +59,14 @@ declare -a REQUIRED_PACKAGES=("git" "curl" "make" "python3" "python3-dev" "pytho
 
 info 'Checking required packages...'
 
-for pkg in ${REQUIRED_PACKAGES[@]}; do
-  if dpkg --get-selections | grep -q "^$pkg[[:space:]]*install$" >/dev/null; then
+for pkg in ${REQUIRED_PACKAGES[@]}
+do
+  if dpkg --get-selections | grep -q "^$pkg[[:space:]]*install$" >/dev/null
+  then
     success "$pkg is installed."
   else
-    if $ISSUDO; then
+    if $ISSUDO
+    then
       apt-get install -qq $pkg
     else
       fail "$pkg is not installed"
@@ -77,8 +81,10 @@ echo ''
 ###
 # Install ZSH
 
-if ! command -v zsh &> /dev/null; then
-  if $ISSUDO; then
+if ! command -v zsh &> /dev/null
+then
+  if $ISSUDO
+  then
     apt-get install -qq zsh
   else
     ZSH_INSTALL_DIR=$HOME/.services/zsh
@@ -132,13 +138,15 @@ fi
 
 ##
 # Oh My ZSH
-if [ ! -d $HOME/.oh-my-zsh ]; then
+if [ ! -d $HOME/.oh-my-zsh ]
+then
   sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
 
 ##
 # Install Node Version Manager (nvm)
-if [ ! -d $HOME/.nvm ]; then
+if [ ! -d $HOME/.nvm ]
+then
   wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
   source ~/.zshrc
   nvm install --lts
@@ -147,3 +155,98 @@ fi
 ##
 # Neovim
 
+
+# Install Dotfiles
+link_file () {
+  local src=$1 dst=$2
+
+  local overwrite= backup= skip=
+  local action=
+
+  if [ -f "$dst" -o -d "$dst" -o -L "$dst" ]
+  then
+
+    if [ "$overwrite_all" == "false" ] && [ "$backup_all" == "false" ] && [ "$skip_all" == "false" ]
+    then
+
+      local currentSrc="$(readlink $dst)"
+
+      if [ "$currentSrc" == "$src" ]
+      then
+
+        skip=true;
+
+      else
+
+        user "File already exists: $dst ($(basename "$src")), what do you want to do?\n\
+        [s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [b]ackup, [B]ackup all?"
+        read -n 1 action
+
+        case "$action" in
+          o )
+            overwrite=true;;
+          O )
+            overwrite_all=true;;
+          b )
+            backup=true;;
+          B )
+            backup_all=true;;
+          s )
+            skip=true;;
+          S )
+            skip_all=true;;
+          * )
+            ;;
+        esac
+
+      fi
+
+    fi
+
+    overwrite=${overwrite:-$overwrite_all}
+    backup=${backup:-$backup_all}
+    skip=${skip:-$skip_all}
+
+    if [ "$overwrite" == "true" ]
+    then
+      rm -rf "$dst"
+      success "removed $dst"
+    fi
+
+    if [ "$backup" == "true" ]
+    then
+      mv "$dst" "${dst}.backup"
+      success "moved $dst to ${dst}.backup"
+    fi
+
+    if [ "$skip" == "true" ]
+    then
+      success "skipped $src"
+    fi
+  fi
+
+  if [ "$skip" != "true" ]  # "false" or empty
+  then
+    ln -s "$1" "$2"
+    success "linked $1 to $2"
+  fi
+}
+
+install_dotfiles () {
+  info 'installing dotfiles'
+
+  local overwrite_all=false backup_all=false skip_all=false
+
+  for src in $(find -H "$DOTFILES_ROOT" -maxdepth 2 -name '*.symlink' -not -path '*.git*')
+  do
+    dst="$HOME/.$(basename "${src%.*}")"
+    link_file "$src" "$dst"
+  done
+}
+
+install_dotfiles
+
+if [ ! -d $HOME/.tmux/plugins/tpm ]
+then
+  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+fi
