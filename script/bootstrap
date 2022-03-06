@@ -210,11 +210,12 @@ then
   fi
 fi
 
+NVCHAD_JUST_INSTALLED=false
 # Nvchad installing
 if [ ! -f $HOME/.config/nvim/init.lua ]
 then
   git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1
-  # nvim +'hi NormalFloat guibg=#1e222a' +PackerSync
+  NVCHAD_JUST_INSTALLED=true
   success "Nvchad installed"
 fi
 
@@ -334,3 +335,13 @@ then
 fi
 
 # }}}
+
+
+# ==============================================================
+# Post Install
+# ==============================================================
+if NVCHAD_JUST_INSTALLED
+then
+  nvim +'hi NormalFloat guibg=#1e222a' +PackerSync
+fi
+
