@@ -1,16 +1,14 @@
-local map = require("core.utils").map
+local M = {}
 
--- Turkish characters
-map("n", "ğ", "[")
-map("n", "Ğ", "{")
-map("n", "ü", "]")
-map("n", "Ü", "}")
-map("n", "ı", "i")
+M.gokhan = {
+  n = {
+    ["ğ"] = {"["},
+    ["Ğ"] = {"{"},
+    ["ü"] = {"]"},
+    ["Ü"] = {"}"},
+    ["ı"] = {"i"},
+    ["ş"] = {"/"},
+  },
+}
 
--- Save
-map("i", "<C-s>", "<C-O>:update<cr>")
-
--- Quit
-map("i", "<C-Q>", "<esc>:q<cr>")
-map("n", "<C-Q>", ":q<cr>")
-map("v", "<C-Q>", "<esc>")
+return M
