@@ -228,6 +228,7 @@ fi
 
 # }}}
 
+
 # ==============================================================
 # Oh My TMUX {{{
 # ==============================================================
@@ -240,21 +241,36 @@ fi
 
 # }}}
 
+
 # ==============================================================
 # Starship {{{
 # ==============================================================
 
-curl -sS https://starship.rs/install.sh | sh
+if $ISSUDO
+then
+  if [ ! -d /usr/bin/starship ]
+  then
+    curl -sS https://starship.rs/install.sh | sh
+  fi
+fi
 
 # }}}
+
 
 # ==============================================================
 # Zoxide {{{
 # ==============================================================
 
-curl -sS https://webinstall.dev/zoxide | bash
+if $ISSUDO
+then
+  if [ ! -d /usr/bin/zoxide ]
+  then
+    curl -sS https://webinstall.dev/zoxide | bash
+  fi
+fi
 
 # }}}
+
 
 # ==============================================================
 # Install Dotfiles {{{
@@ -353,22 +369,10 @@ install_dotfiles
 
 
 # ==============================================================
-# TMUX TPM Plugin {{{
-# ==============================================================
-
-if [ ! -d $HOME/.tmux/plugins/tpm ]
-then
-  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-fi
-
-# }}}
-
-
-# ==============================================================
 # Post Install
 # ==============================================================
 if NVCHAD_JUST_INSTALLED
 then
-  nvim +'hi NormalFloat guibg=#1e222a' +PackerSync
+  nvim +PackerSync
 fi
 
