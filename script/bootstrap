@@ -80,7 +80,7 @@ do
   else
     if $ISSUDO
     then
-      apt-get install -qq $pkg
+      sudo apt-get install -qq $pkg
     else
       fail "$pkg is not installed"
       exit
@@ -104,7 +104,7 @@ then
   info 'ZSH not found.'
   if $ISSUDO
   then
-    apt-get install -qq zsh
+    sudo apt-get install -qq zsh
     success 'Installed as sudo'
   else
     info 'Installing as non sudo user'
@@ -371,7 +371,7 @@ install_dotfiles
 # ==============================================================
 # Post Install
 # ==============================================================
-if NVCHAD_JUST_INSTALLED
+if $NVCHAD_JUST_INSTALLED
 then
   nvim +PackerSync
 fi

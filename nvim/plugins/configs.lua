@@ -28,7 +28,6 @@ M.mason = {
     "prettier",
     "pyright",
     "typescript-language-server",
-    "deno",
     "json-lsp",
     "mypy",
     "lua-language-server",
