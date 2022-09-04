@@ -2,6 +2,7 @@ alias g='git'
 
 alias ga='git add'
 
+alias gst='git status'
 alias gsb='git status -sb'
 
 alias gb='git branch'
@@ -9,7 +10,7 @@ alias gbd='git branch -d'
 alias gbD='git branch -D'
 
 alias gc='git commit -v'
-alias gca='git commit -v -a'
+alias gca='git commit -va'
 
 alias gco='git checkout'
 
