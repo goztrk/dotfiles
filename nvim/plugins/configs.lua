@@ -15,6 +15,9 @@ M.treesitter = {
     "tsx",
     "vue",
   },
+  indent = {
+    enable = true,
+  },
 }
 
 M.mason = {
@@ -34,6 +37,11 @@ M.mason = {
     "vetur-vls",
     "vue-language-server",
   },
+}
+
+M.indentline = {
+  show_current_context = true,
+  show_current_context_start = true,
 }
 
 return M

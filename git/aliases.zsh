@@ -18,6 +18,10 @@ alias gpu='git push'
 alias gpl='git pull'
 alias gpuuo='git push --set-upstream origin $(git_current_branch)'
 
+alias gl='git log'
+alias glo='git log --oneline'
+alias glg='git log --graph --oneline'
+
 alias grb='git rebase'
 alias grba='git rebase --abort'
 alias grbc='git rebase --continue'

@@ -7,6 +7,7 @@ M.plugins = {
     ["nvim-treesitter/nvim-treesitter"] = pluginConfs.treesitter,
     ["kyazdani42/nvim-tree.lua"] = pluginConfs.nvimtree,
     ["williamboman/mason.nvim"] = pluginConfs.mason,
+    ["lukas-reineke/indent-blankline.nvim"] = pluginConfs.indentline,
   },
 }
 
