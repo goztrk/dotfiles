@@ -41,7 +41,7 @@ fail () {
   exit
 }
 
-ISSUDO=$(sudo -l &> /dev/null);
+# ISSUDO=$(sudo -l &> /dev/null);
 
 # }}}
 
