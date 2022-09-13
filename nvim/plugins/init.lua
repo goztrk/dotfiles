@@ -5,6 +5,7 @@ return {
       require "custom.plugins.lspconfig"
     end,
   },
+  ["neoclide/coc.nvim"] = {},
   ["gpanders/editorconfig.nvim"] = {},
   ["goolord/alpha-nvim"] = {
     disable = false,
