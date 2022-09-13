@@ -19,6 +19,7 @@ displayUsageAndExit() {
 	echo "Options:"
 	echo "  -e, --edit    Open dotfiles directory for editing"
 	echo "  -h, --help    Show this help message and exit"
+  echo "  -s, --sync    Pull latest changes from github"
 	exit
 }
 
@@ -31,6 +32,10 @@ while test $# -gt 0; do
 			exec "$EDITOR" "$dotfilesDirectory"
 			exit
 			;;
+    "-s"|"--sync")
+      (cd ~/.dotfiles && git pull)
+      exit
+      ;;
 		*)
 			echo "Invalid option: $1"
 			displayUsageAndExit
