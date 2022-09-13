@@ -13,6 +13,8 @@ alias gc='git commit -v'
 alias gca='git commit -va'
 
 alias gco='git checkout'
+alias gcom='git checkout master'
+alias gcob='git checkout -b'
 
 alias gpu='git push'
 alias gpl='git pull'
