@@ -1,4 +1,5 @@
 return {
+  ["vim-scripts/argtextobj.vim"] = {},
   ["neovim/nvim-lspconfig"] = {
     config = function()
       require "plugins.configs.lspconfig"
