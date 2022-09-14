@@ -45,6 +45,9 @@ M.indentline = {
 }
 
 M.nvimtree = {
+  open_on_setup = true,
+  prefer_startup_root = true,
+  sync_root_with_cwd = true,
   git = {
     enable = true,
   },
