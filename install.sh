@@ -78,7 +78,7 @@ echo ''
 
 step '2' 'Running installers'
 
-find . -name installer.sh | while read installer ; do sh -c "${installer}" ; done
+find . -name installer.sh | while read installer ; do sh -c "${installer}" ; echo $installer ; done
 
 success 'Done!'
 
