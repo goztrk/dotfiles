@@ -29,4 +29,5 @@ require 'user.neoscroll'
 
 require 'user.functions'
 require 'user.lir'
+require 'user.winbar'
 require 'user.options'
