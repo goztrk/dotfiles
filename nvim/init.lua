@@ -23,6 +23,7 @@ require 'user.hop'
 require 'user.matchup'
 require 'user.numb'
 require 'user.dial'
+require 'user.colorizer'
 
 require 'user.functions'
 require 'user.lir'
