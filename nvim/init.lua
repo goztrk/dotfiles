@@ -28,3 +28,4 @@ require 'user.spectre'
 
 require 'user.functions'
 require 'user.lir'
+require 'user.options'
