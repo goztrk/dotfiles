@@ -14,6 +14,7 @@ require 'user.gitsigns'
 require 'user.nvimtree'
 reload "user.lualine"
 require 'user.toggleterm'
+require 'user.project'
 require 'user.whichkey'
 require 'user.functions'
 require 'user.lir'
