@@ -20,6 +20,7 @@ require 'user.indentline'
 require 'user.alpha'
 require 'user.whichkey'
 require 'user.hop'
+require 'user.matchup'
 
 require 'user.functions'
 require 'user.lir'
