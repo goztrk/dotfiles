@@ -1,39 +1,34 @@
 M = {}
 local opts = { noremap = true, silent = true }
 
-local termOpts = { silent = true }
+
+local term_opts = { silent = true }
 
 -- Shorten function name
-keymap = vim.api.nvim_set_keymap
+local keymap = vim.api.nvim_set_keymap
 
--- Remap space as leader key
+--Remap space as leader key
 keymap("n", "<Space>", "", opts)
 vim.g.mapleader = " "
+
 vim.g.maplocalleader = " "
 keymap("n", "<C-Space>", "<cmd>WhichKey \\<leader><cr>", opts)
 keymap("n", "<C-i>", "<C-i>", opts)
 
--- INSERT MODE --
--- Go to beggining and end
-keymap("i", "<C-b>", "<ESC>^i", opts)
-keymap("i", "<C-e>", "<End>", opts)
+-- Allow moving the cursor through wrapped lines with j, k, <Up> and <Down>
+-- http://www.reddit.com/r/vim/comments/2k4cbr/problem_with_gj_and_gk/
+-- empty mode is same as using <cmd> :map
+-- also don't use g[j|k] when in operator pending mode, so it doesn't alter d, y or c behaviour
+-- TODO
 
--- Navigate within insert mode
-keymap("i", "<C-h>", "<Left>", opts)
-keymap("i", "<C-l>", "<Right>", opts)
-keymap("i", "<C-j>", "<Down>", opts)
-keymap("i", "<C-k>", "<Up>", opts)
+-- Switch between windows
+keymap('n', '<C-h>', '<C-w>h', opts)
+keymap('n', '<C-l>', '<C-w>l', opts)
+keymap('n', '<C-j>', '<C-w>j', opts)
+keymap('n', '<C-k>', '<C-w>k', opts)
 
-
--- NORMAL MODE --
-keymap("n", "<C-s>", ":w<CR>", opts)
 -- Resize with arrows
 keymap("n", "<C-Up>", ":resize -2<CR>", opts)
 keymap("n", "<C-Down>", ":resize +2<CR>", opts)
 keymap("n", "<C-Left>", ":vertical resize -2<CR>", opts)
 keymap("n", "<C-Right>", ":vertical resize +2<CR>", opts)
-
--- Navigate buffers
-keymap("n", "<Tab>", ":bnext<CR>", opts)
-keymap("n", "<S-Tab>", ":bprevious<CR>", opts)
--- keymap("", "", "", opts)

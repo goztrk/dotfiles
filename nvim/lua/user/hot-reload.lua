@@ -9,7 +9,6 @@ local M = {}
 --   else
 --     vim.notify("Failed to require '" .. package .. "' from " .. debug.getinfo(2).source)
 --     return nil
-
 --   end
 -- end
 
@@ -24,7 +23,6 @@ local function _assign(old, new, k)
 end
 
 local function _replace(old, new, repeat_tbl)
-
   if repeat_tbl[old] then
     return
   end
@@ -35,9 +33,7 @@ local function _replace(old, new, repeat_tbl)
     if not new[k] then
       table.insert(dellist, k)
     end
-
   end
-
   for _, v in ipairs(dellist) do
     old[v] = nil
   end
