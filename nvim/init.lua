@@ -22,6 +22,7 @@ require 'user.whichkey'
 require 'user.hop'
 require 'user.matchup'
 require 'user.numb'
+require 'user.dial'
 
 require 'user.functions'
 require 'user.lir'
