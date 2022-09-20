@@ -29,6 +29,8 @@ require 'user.spectre'
 require 'user.zen-mode'
 require 'user.neoscroll'
 require 'user.todo-comments'
+require 'user.bookmark'
+
 require 'user.ts-context'
 require 'user.functions'
 require 'user.lir'
