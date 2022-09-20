@@ -1,4 +1,5 @@
 alias g='git'
+alias lg='lazygit'
 
 alias ga='git add'
 
