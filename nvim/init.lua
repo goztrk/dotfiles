@@ -26,6 +26,7 @@ require 'user.dial'
 require 'user.colorizer'
 require 'user.spectre'
 require 'user.neoscroll'
+require 'user.ts-context'
 
 require 'user.functions'
 require 'user.lir'
