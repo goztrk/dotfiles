@@ -15,6 +15,7 @@ require 'user.nvimtree'
 reload "user.lualine"
 require 'user.toggleterm'
 require 'user.project'
+require 'user.impatient'
 require 'user.whichkey'
 require 'user.functions'
 require 'user.lir'
