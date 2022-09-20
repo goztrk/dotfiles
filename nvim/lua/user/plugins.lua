@@ -128,6 +128,9 @@ run = "./install.sh" }
   use 'kyazdani42/nvim-web-devicons'
   use 'yamatsum/nvim-nonicons'
 
+  -- Tabline
+  use 'akinsho/bufferline.nvim'
+
   -- Statusline
   use "christianchiarulli/lualine.nvim"
 
