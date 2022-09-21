@@ -129,6 +129,15 @@ local plugins = {
     end,
   },
 
+  ["lukas-reineke/indent-blankline.nvim"] = {
+    config = function()
+      require "plugins.configs.blankline"
+    end,
+    setup = function()
+      require("core.utils").load_mappings "blankline"
+    end,
+  },
+
   -- Only load whichkey after all the gui
   ["folke/which-key.nvim"] = {
     disable = false,
