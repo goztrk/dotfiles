@@ -149,6 +149,31 @@ local plugins = {
     after = "nvim-treesitter",
   },
 
+  ["p00f/nvim-ts-rainbow"] = {
+    after = "nvim-treesitter",
+  },
+
+  ["windwp/nvim-ts-autotag"] = {
+    after = "nvim-treesitter",
+  },
+
+  ["nvim-treesitter/nvim-treesitter-textobjects"] = {
+    after = "nvim-treesitter",
+  },
+
+  ["kylechui/nvim-surround"] = {
+    config = function()
+      require "plugins.configs.surround"
+    end,
+  },
+
+  ["abecodes/tabout.nvim"] = {
+    after = "nvim-treesitter",
+    config = function()
+      require "plugins.configs.tabout"
+    end,
+  },
+
   ["famiu/bufdelete.nvim"] = {
     setup = function()
       require("core.utils").load_mappings "bufdelete"
