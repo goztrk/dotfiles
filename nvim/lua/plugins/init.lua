@@ -86,12 +86,17 @@ local plugins = {
 
   ["lewis6991/gitsigns.nvim"] = {
     config = function()
-      require("plugins.configs.others").gitsigns()
+      require("plugins.configs.gitsigns")
     end,
   },
 
+  ["NvChad/nvim-colorizer.lua"] = {
+    config = function()
+      require "plugins.configs.colorizer"
+    end
+  },
+
   ["goolord/alpha-nvim"] = {
-    disable = false,
     config = function()
       require "plugins.configs.alpha"
     end,
@@ -170,6 +175,12 @@ local plugins = {
     end,
   },
 
+  ["rcarriga/nvim-notify"] = {
+    config = function()
+      require "plugins.configs.notify"
+    end,
+  },
+
   ["windwp/nvim-autopairs"] = {
     config = function()
       require "plugins.configs.autopairs"
@@ -184,7 +195,6 @@ local plugins = {
 
   -- Only load whichkey after all the gui
   ["folke/which-key.nvim"] = {
-    disable = false,
     module = "which-key",
     keys = { "<leader>", '"', "'", "`" },
     config = function()
