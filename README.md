@@ -9,7 +9,7 @@ Right now sudo installations only works for ubuntu based distros.
 - ZSH (as sudoer or normal user)
 - OH-MY-ZSH
 - Neovim
-- Nvchad
+- Combination of NvChad and Christian Chiarulli's config
 - tmux
 - GIT aliases
 - `bin` directory
