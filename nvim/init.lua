@@ -1,59 +1,34 @@
-require 'user.hot-reload'
-require 'user.keymaps'
-require 'user.plugins'
-require 'user.autocommands'
-require 'user.colorscheme'
-require 'user.cmp'
-require 'user.navic'
-require 'user.lsp-inlayhints'
-require 'user.lsp'
-require 'user.telescope'
-require 'user.treesitter'
-require 'user.autopairs'
-require 'user.comment'
-require 'user.gitsigns'
-require 'user.nvimtree'
-reload 'user.lualine'
-require 'user.toggleterm'
-require 'user.project'
-require 'user.impatient'
-require 'user.indentline'
-require 'user.alpha'
-require 'user.whichkey'
-require 'user.hop'
-require 'user.matchup'
-require 'user.numb'
-require 'user.dial'
-require 'user.colorizer'
-require 'user.spectre'
-require 'user.zen-mode'
-require 'user.neoscroll'
-require 'user.todo-comments'
-require 'user.bookmark'
-require 'user.symbol-outline'
-require 'user.git-blame'
-require 'user.gist'
-require 'user.gitlinker'
-require 'user.notify'
-require 'user.ts-context'
-require 'user.registers'
-require 'user.sniprun'
-require 'user.functions'
-require 'user.dap'
-require 'user.lir'
-require 'user.cybu'
-require 'user.winbar'
-require 'user.options'
-require 'user.nvim-webdev-icons'
-require 'user.bfs'
-require 'user.crates'
-require 'user.dressing'
-require 'user.tabout'
-require 'user.fidget'
-require 'user.bufferline'
-require 'user.auto-session'
-require 'user.jaq'
-require 'user.surround'
-require 'user.harpoon'
-require 'user.lab'
-require 'user.vim-slash'
+vim.defer_fn(function()
+  pcall(require, "impatient")
+end, 0)
+
+require "core"
+require "core.options"
+
+-- setup packer + plugins
+local fn = vim.fn
+local install_path = fn.stdpath "data" .. "/site/pack/packer/opt/packer.nvim"
+
+if fn.empty(fn.glob(install_path)) > 0 then
+  vim.api.nvim_set_hl(0, "NormalFloat", { bg = "#1e222a" })
+  print "Cloning packer .."
+  fn.system { "git", "clone", "--depth", "1", "https://github.com/wbthomason/packer.nvim", install_path }
+
+  -- install plugins + compile their configs
+  vim.cmd "packadd packer.nvim"
+  require "plugins"
+  vim.cmd "PackerSync"
+
+  -- install binaries from mason.nvim & tsparsers
+  vim.api.nvim_create_autocmd("User", {
+    pattern = "PackerComplete",
+    callback = function()
+      vim.cmd "bw | silent! MasonInstallAll" -- close packer window
+      require("packer").loader "nvim-treesitter"
+    end,
+  })
+end
+
+pcall(require, "custom")
+
+require("core.utils").load_mappings()
