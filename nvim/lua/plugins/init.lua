@@ -84,6 +84,12 @@ local plugins = {
     end,
   },
 
+  ["lewis6991/gitsigns.nvim"] = {
+    config = function()
+      require("plugins.configs.others").gitsigns()
+    end,
+  },
+
   ["goolord/alpha-nvim"] = {
     disable = false,
     config = function()
@@ -167,6 +173,12 @@ local plugins = {
   ["windwp/nvim-autopairs"] = {
     config = function()
       require "plugins.configs.autopairs"
+    end,
+  },
+
+  ["akinsho/toggleterm.nvim"] = {
+    config = function()
+      require "plugins.configs.toggleterm"
     end,
   },
 
