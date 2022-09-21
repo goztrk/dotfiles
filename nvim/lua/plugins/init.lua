@@ -145,6 +145,10 @@ local plugins = {
     run = ":TSUpdate",
   },
 
+  ["JoosepAlviste/nvim-ts-context-commentstring"] = {
+    after = "nvim-treesitter",
+  },
+
   ["famiu/bufdelete.nvim"] = {
     setup = function()
       require("core.utils").load_mappings "bufdelete"
