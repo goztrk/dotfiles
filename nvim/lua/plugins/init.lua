@@ -46,6 +46,14 @@ local plugins = {
     end,
   },
 
+  ["https://git.sr.ht/~whynothugo/lsp_lines.nvim"] = {
+    config = function()
+      require "plugins.configs.lsplines"
+    end,
+  },
+
+  ["RRethy/vim-illuminate"] = {},
+
   ["rafamadriz/friendly-snippets"] = {
     module = { "cmp", "cmp_nvim_lsp" },
     event = "InsertEnter",
