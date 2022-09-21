@@ -34,7 +34,7 @@ M.general = {
     -- Copy all
     ["<C-c>"] = { "<cmd> %y+ <CR>", "copy whole file" },
 
-    ["<leader>q"] = { "<cmd>qa<CR>", "Close nvim" },
+    ["<leader>q"] = { "<cmd>lua require('core.functions').smart_quit()<CR>", "Quit nvim" },
 
     -- line numbers
     ["<leader>n"] = { "<cmd> set nu! <CR>", "toggle line number" },
@@ -207,12 +207,12 @@ M.lspconfig = {
       "goto_next",
     },
 
-    ["<leader>q"] = {
-      function()
-        vim.diagnostic.setloclist()
-      end,
-      "diagnostic setloclist",
-    },
+    -- ["<leader>q"] = {
+    --   function()
+    --     vim.diagnostic.setloclist()
+    --   end,
+    --   "diagnostic setloclist",
+    -- },
 
     ["<leader>fm"] = {
       function()

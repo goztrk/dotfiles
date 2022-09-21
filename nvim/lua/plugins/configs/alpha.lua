@@ -11,11 +11,6 @@ local function button(sc, txt, keybind, keybind_opts)
   return b
 end
 
--- dynamic header padding
-local fn = vim.fn
-local marginTopPercent = 0.3
-local headerPadding = fn.max { 2, fn.floor(fn.winheight(0) * marginTopPercent) }
-
 dashboard.section.header.val = {
   [[                                                ]],
   [[  ______  _____  ______   __    _____   __  __  ]],
