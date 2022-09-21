@@ -92,7 +92,6 @@ local plugins = {
       require "plugins.configs.telescope"
     end,
     setup = function()
-
       require("core.utils").load_mappings "telescope"
     end,
   },
@@ -107,6 +106,21 @@ local plugins = {
       require "plugins.configs.treesitter"
     end,
     run = ":TSUpdate",
+  },
+
+  ["famiu/bufdelete.nvim"] = {
+    setup = function()
+      require("core.utils").load_mappings "bufdelete"
+    end,
+  },
+
+  ["akinsho/bufferline.nvim"] = {
+    config = function()
+      require "plugins.configs.bufferline"
+    end,
+    setup = function()
+      require("core.utils").load_mappings "bufferline"
+    end,
   },
 
   ["christianchiarulli/lualine.nvim"] = {

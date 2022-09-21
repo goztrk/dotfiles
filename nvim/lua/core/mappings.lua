@@ -28,11 +28,6 @@ M.general = {
     ["<C-j>"] = { "<C-w>j", "window down" },
     ["<C-k>"] = { "<C-w>k", "window up" },
 
-    -- Navigate through buffers
-    ["<TAB>"] = { "<cmd>bnext<CR>", "goto next buffer" },
-    ["<S-Tab>"] = { "<cmd>bprevious<CR>", "goto prev buffer" },
-    ["<leader>c"] = { "<cmd>bdelete<CR>", "close buffer" },
-
     -- save
     ["<C-s>"] = { "<cmd> w <CR>", "save file" },
 
@@ -74,35 +69,30 @@ M.general = {
   },
 }
 
-M.tabufline = {
+M.bufdelete = {
+  plugin = true,
+
+  n = {
+    -- close buffer + hide terminal buffer
+    ["<leader>x"] = {
+      function()
+        require("bufdelete").bufdelete(0)
+      end,
+      "close buffer"
+    },
+  },
+}
+
+M.bufferline = {
   plugin = true,
 
   n = {
     -- cycle through buffers
-    ["<TAB>"] = {
-      function()
-        require("nvchad_ui.tabufline").tabuflineNext()
-      end,
-      "goto next buffer",
-    },
-
-    ["<S-Tab>"] = {
-      function()
-        require("nvchad_ui.tabufline").tabuflinePrev()
-      end,
-      "goto prev buffer",
-    },
+    ["<TAB>"] = { "<cmd>BufferLineCycleNext<CR>", "goto next buffer" },
+    ["<S-Tab>"] = { "<cmd>BufferLineCyclePrev<CR>", "goto prev buffer" },
 
     -- pick buffers via numbers
-    ["<Bslash>"] = { "<cmd> TbufPick <CR>", "Pick buffer" },
-
-    -- close buffer + hide terminal buffer
-    ["<leader>x"] = {
-      function()
-        require("nvchad_ui.tabufline").close_buffer()
-      end,
-      "close buffer",
-    },
+    ["<Bslash>"] = { "<cmd>BufferLinePick<CR>", "Pick buffer" },
   },
 }
 
