@@ -222,6 +222,13 @@ local plugins = {
     end,
   },
 
+  ["jose-elias-alvarez/typescript.nvim"] = {
+    disable = true,
+    config = function()
+      require "plugins.configs.typescript"
+    end,
+  },
+
   -- Only load whichkey after all the gui
   ["folke/which-key.nvim"] = {
     module = "which-key",
