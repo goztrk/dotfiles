@@ -40,6 +40,12 @@ local plugins = {
     end,
   },
 
+  ["SmiteshP/nvim-navic"] = {
+    config = function()
+      require "plugins.configs.navic"
+    end,
+  },
+
   ["jose-elias-alvarez/null-ls.nvim"] = {
     config = function()
       require "plugins.configs.lsp.null-ls"
@@ -116,9 +122,6 @@ local plugins = {
     config = function()
       require "plugins.configs.comment"
     end,
-    setup = function()
-      require("core.utils").load_mappings "comment"
-    end,
   },
 
   ["kyazdani42/nvim-tree.lua"] = {
@@ -126,18 +129,12 @@ local plugins = {
     config = function()
       require "plugins.configs.nvimtree"
     end,
-    setup = function()
-      require("core.utils").load_mappings "nvimtree"
-    end,
   },
 
   ["nvim-telescope/telescope.nvim"] = {
     cmd = "Telescope",
     config = function()
       require "plugins.configs.telescope"
-    end,
-    setup = function()
-      require("core.utils").load_mappings "telescope"
     end,
   },
 
@@ -182,18 +179,11 @@ local plugins = {
     end,
   },
 
-  ["famiu/bufdelete.nvim"] = {
-    setup = function()
-      require("core.utils").load_mappings "bufdelete"
-    end,
-  },
+  ["famiu/bufdelete.nvim"] = {},
 
   ["akinsho/bufferline.nvim"] = {
     config = function()
       require "plugins.configs.bufferline"
-    end,
-    setup = function()
-      require("core.utils").load_mappings "bufferline"
     end,
   },
 
@@ -206,9 +196,6 @@ local plugins = {
   ["lukas-reineke/indent-blankline.nvim"] = {
     config = function()
       require "plugins.configs.blankline"
-    end,
-    setup = function()
-      require("core.utils").load_mappings "blankline"
     end,
   },
 
@@ -237,15 +224,24 @@ local plugins = {
     end,
   },
 
+  ["gpanders/editorconfig.nvim"] = {},
+
+  ["windwp/nvim-spectre"] = {
+    config = function()
+      require "plugins.configs.spectre"
+    end,
+  },
+
+  ["stevearc/dressing.nvim"] = {
+    config = function()
+      require "plugins.configs.dressing"
+    end,
+  },
+
   -- Only load whichkey after all the gui
   ["folke/which-key.nvim"] = {
-    module = "which-key",
-    keys = { "<leader>", '"', "'", "`" },
     config = function()
       require "plugins.configs.whichkey"
-    end,
-    setup = function()
-      require("core.utils").load_mappings "whichkey"
     end,
   },
 }

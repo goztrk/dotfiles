@@ -3,18 +3,10 @@ if not present then
   return
 end
 
+local servers = vim.tbl_keys(require("plugins.configs.lsp.servers"))
+
 local options = {
-  ensure_installed = {
-    "cssls",
-    "cssmodules_ls",
-    "emmet_ls",
-    "html",
-    "jsonls",
-    "sumneko_lua",
-    "tsserver",
-    "pyright",
-    "bashls",
-  },
+  ensure_installed = servers,
   automatic_installation = true,
 }
 

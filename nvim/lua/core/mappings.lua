@@ -1,396 +1,86 @@
--- n, v, i, t = mode names
+local opts = { noremap = true, silent = true }
 
+-- Shorten function name
+local keymap = vim.api.nvim_set_keymap
+
+--Remap space as leader key
+keymap("n", "<Space>", "", opts)
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+keymap("n", "<C-Space>", "<cmd>WhichKey \\<leader><cr>", opts)
+keymap("n", "<C-i>", "<C-i>", opts)
+
+-- Modes
+--   normal_mode = "n",
+--   insert_mode = "i",
+--   visual_mode = "v",
+--   visual_block_mode = "x",
+--   term_mode = "t",
+--   command_mode = "c",
+
+
+-- Normal --
+------------
+keymap("n", "<ESC>", "<cmd>noh<CR>", opts) -- No highlight
+keymap("n", "<C-s>", "<cmd>w<CR>", opts)
+-- Better window navigation
+keymap("n", "<m-h>", "<C-w>h", opts)
+keymap("n", "<m-j>", "<C-w>j", opts)
+keymap("n", "<m-k>", "<C-w>k", opts)
+keymap("n", "<m-l>", "<C-w>l", opts)
+keymap("n", "<m-tab>", "<c-6>", opts)
+-- Resize with arrows
+keymap("n", "<C-Up>", "<cmd>resize -2<CR>", opts)
+keymap("n", "<C-Down>", "<cmd>resize +2<CR>", opts)
+keymap("n", "<C-Left>", "<cmd>vertical resize -2<CR>", opts)
+keymap("n", "<C-Right>", "<cmd>vertical resize +2<CR>", opts)
+-- Allow moving the cursor through wrapped lines with j, k, <Up> and <Down>
+-- http://www.reddit.com/r/vim/comments/2k4cbr/problem_with_gj_and_gk/
+-- empty mode is same as using <cmd> :map
+-- also don't use g[j|k] when in operator pending mode, so it doesn't alter d, y or c behaviour
+-- keymap("n", "j", '<expr>v:count || mode(1)[0:1] == "no" ? "j" : "gj"', opts)
+-- keymap("n", "k", '<expr>v:count || mode(1)[0:1] == "no" ? "k" : "gk"', opts)
+-- keymap("n", "<Up>", '<expr>v:count || mode(1)[0:1] == "no" ? "j" : "gj"', opts)
+-- keymap("n", "<Down>", '<expr>v:count || mode(1)[0:1] == "no" ? "k" : "gk"', opts)
+keymap("n", "<Tab>", "<cmd>BufferLineCycleNext<CR>", opts)
+keymap("n", "<S-Tab>", "<cmd>BufferLineCyclePrev<CR>", opts)
+
+
+-- Insert --
+------------
+keymap("i", "<C-s>", "<cmd>w<CR>", opts)
+keymap("i", "<C-b>", "<ESC>^i", opts) -- Move beggining of current line 
+keymap("i", "<C-e>", "<End>", opts) -- Move end of current line 
+-- Navigate in insert mode
+keymap("i", "<C-h>", "<Left>", opts)
+keymap("i", "<C-l>", "<Right>", opts)
+keymap("i", "<C-j>", "<Down>", opts)
+keymap("i", "<C-k>", "<Up>", opts)
+
+
+-- Visual --
+------------
+keymap("v", "<C-s>", "<cmd>w<CR>", opts)
+-- keymap("v", "j", '<expr>v:count || mode(1)[0:1] == "no" ? "j" : "gj"', opts)
+-- keymap("v", "k", '<expr>v:count || mode(1)[0:1] == "no" ? "k" : "gk"', opts)
+-- keymap("v", "<Up>", '<expr>v:count || mode(1)[0:1] == "no" ? "j" : "gj"', opts)
+-- keymap("v", "<Down>", '<expr>v:count || mode(1)[0:1] == "no" ? "k" : "gk"', opts)
+-- Stay in indent mode
+keymap("v", "<", "<gv", opts)
+keymap("v", ">", ">gv", opts)
+
+
+-- Visual Block --
+------------------
+-- keymap("x", "j", '<expr>v:count || mode(1)[0:1] == "no" ? "j" : "gj"', opts)
+-- keymap("x", "k", '<expr>v:count || mode(1)[0:1] == "no" ? "k" : "gk"', opts)
+-- Don't copy the replaced text after pasting in visual mode
+-- https://vim.fandom.com/wiki/Replace_a_word_with_yanked_text#Alternative_mapping_for_paste
+keymap("x", "p", 'p:let @+=@0<CR>:let @"=@0<CR>', opts)
+
+
+-- Terminal
 local function termcodes(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
-
-local M = {}
-
-M.general = {
-  i = {
-    -- go to  beginning and end
-    ["<C-b>"] = { "<ESC>^i", "beginning of line" },
-    ["<C-e>"] = { "<End>", "end of line" },
-
-    -- navigate within insert mode
-    ["<C-h>"] = { "<Left>", "move left" },
-    ["<C-l>"] = { "<Right>", "move right" },
-    ["<C-j>"] = { "<Down>", "move down" },
-    ["<C-k>"] = { "<Up>", "move up" },
-  },
-
-  n = {
-    ["<ESC>"] = { "<cmd> noh <CR>", "no highlight" },
-
-    -- switch between windows
-    ["<C-h>"] = { "<C-w>h", "window left" },
-    ["<C-l>"] = { "<C-w>l", "window right" },
-    ["<C-j>"] = { "<C-w>j", "window down" },
-    ["<C-k>"] = { "<C-w>k", "window up" },
-
-    -- save
-    ["<C-s>"] = { "<cmd> w <CR>", "save file" },
-
-    -- Copy all
-    ["<C-c>"] = { "<cmd> %y+ <CR>", "copy whole file" },
-
-    ["<leader>q"] = { "<cmd>lua require('core.functions').smart_quit()<CR>", "Quit nvim" },
-
-    -- line numbers
-    ["<leader>n"] = { "<cmd> set nu! <CR>", "toggle line number" },
-    ["<leader>rn"] = { "<cmd> set rnu! <CR>", "toggle relative number" },
-
-    -- Allow moving the cursor through wrapped lines with j, k, <Up> and <Down>
-    -- http://www.reddit.com/r/vim/comments/2k4cbr/problem_with_gj_and_gk/
-    -- empty mode is same as using <cmd> :map
-    -- also don't use g[j|k] when in operator pending mode, so it doesn't alter d, y or c behaviour
-    ["j"] = { 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', opts = { expr = true } },
-    ["k"] = { 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', opts = { expr = true } },
-    ["<Up>"] = { 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', opts = { expr = true } },
-    ["<Down>"] = { 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', opts = { expr = true } },
-
-    -- new buffer
-    ["<leader>b"] = { "<cmd> enew <CR>", "new buffer" },
-  },
-
-  t = { ["<C-x>"] = { termcodes "<C-\\><C-N>", "escape terminal mode" } },
-
-  v = {
-    ["<Up>"] = { 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', opts = { expr = true } },
-    ["<Down>"] = { 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', opts = { expr = true } },
-    ["<"] = { "<gv", opts = { noremap = true, silent = true } },
-    [">"] = { ">gv", opts = { noremap = true, silent = true } },
-  },
-
-  x = {
-    ["j"] = { 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', opts = { expr = true } },
-    ["k"] = { 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', opts = { expr = true } },
-    -- Don't copy the replaced text after pasting in visual mode
-    -- https://vim.fandom.com/wiki/Replace_a_word_with_yanked_text#Alternative_mapping_for_paste
-    ["p"] = { 'p:let @+=@0<CR>:let @"=@0<CR>', opts = { silent = true } },
-  },
-}
-
-M.bufdelete = {
-  plugin = true,
-
-  n = {
-    -- close buffer + hide terminal buffer
-    ["<leader>x"] = {
-      function()
-        require("bufdelete").bufdelete(0)
-      end,
-      "close buffer"
-    },
-  },
-}
-
-M.bufferline = {
-  plugin = true,
-
-  n = {
-    -- cycle through buffers
-    ["<TAB>"] = { "<cmd>BufferLineCycleNext<CR>", "goto next buffer" },
-    ["<S-Tab>"] = { "<cmd>BufferLineCyclePrev<CR>", "goto prev buffer" },
-
-    -- pick buffers via numbers
-    ["<Bslash>"] = { "<cmd>BufferLinePick<CR>", "Pick buffer" },
-  },
-}
-
-M.comment = {
-  plugin = true,
-
-  -- toggle comment in both modes
-  n = {
-    ["<leader>/"] = {
-      function()
-        require("Comment.api").toggle.linewise.current()
-      end,
-      "toggle comment",
-    },
-  },
-
-  v = {
-    ["<leader>/"] = {
-      "<ESC><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>",
-      "toggle comment",
-    },
-  },
-}
-
-M.lspconfig = {
-  plugin = true,
-
-  -- See `<cmd> :help vim.lsp.*` for documentation on any of the below functions
-
-  n = {
-    ["gD"] = {
-      function()
-        vim.lsp.buf.declaration()
-      end,
-      "lsp declaration",
-    },
-
-    ["gd"] = {
-      function()
-        vim.lsp.buf.definition()
-      end,
-      "lsp definition",
-    },
-
-    ["K"] = {
-      function()
-        vim.lsp.buf.hover()
-      end,
-      "lsp hover",
-    },
-
-    ["gi"] = {
-      function()
-        vim.lsp.buf.implementation()
-      end,
-      "lsp implementation",
-    },
-
-    ["<leader>ls"] = {
-      function()
-        vim.lsp.buf.signature_help()
-      end,
-      "lsp signature_help",
-    },
-
-    ["<leader>D"] = {
-      function()
-        vim.lsp.buf.type_definition()
-      end,
-      "lsp definition type",
-    },
-
-    ["<leader>ra"] = {
-      function()
-        require("nvchad_ui.renamer").open()
-      end,
-      "lsp rename",
-    },
-
-    ["<leader>ca"] = {
-      function()
-        vim.lsp.buf.code_action()
-      end,
-      "lsp code_action",
-    },
-
-    ["gr"] = {
-      function()
-        vim.lsp.buf.references()
-      end,
-      "lsp references",
-    },
-
-    ["<leader>f"] = {
-      function()
-        vim.diagnostic.open_float()
-      end,
-      "floating diagnostic",
-    },
-
-    ["[d"] = {
-      function()
-        vim.diagnostic.goto_prev()
-      end,
-      "goto prev",
-    },
-
-    ["d]"] = {
-      function()
-        vim.diagnostic.goto_next()
-      end,
-      "goto_next",
-    },
-
-    -- ["<leader>q"] = {
-    --   function()
-    --     vim.diagnostic.setloclist()
-    --   end,
-    --   "diagnostic setloclist",
-    -- },
-
-    ["<leader>fm"] = {
-      function()
-        vim.lsp.buf.formatting {}
-      end,
-      "lsp formatting",
-    },
-
-    ["<leader>wa"] = {
-      function()
-        vim.lsp.buf.add_workspace_folder()
-      end,
-      "add workspace folder",
-    },
-
-    ["<leader>wr"] = {
-      function()
-        vim.lsp.buf.remove_workspace_folder()
-      end,
-      "remove workspace folder",
-    },
-
-    ["<leader>wl"] = {
-      function()
-        print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-      end,
-      "list workspace folders",
-    },
-  },
-}
-
-M.nvimtree = {
-  plugin = true,
-
-  n = {
-    -- toggle
-    ["<C-n>"] = { "<cmd> NvimTreeToggle <CR>", "toggle nvimtree" },
-
-    -- focus
-    ["<leader>e"] = { "<cmd> NvimTreeFocus <CR>", "focus nvimtree" },
-  },
-}
-
-M.telescope = {
-  plugin = true,
-
-  n = {
-    -- find
-    ["<leader>ff"] = { "<cmd> Telescope find_files <CR>", "find files" },
-    ["<leader>fa"] = { "<cmd> Telescope find_files follow=true no_ignore=true hidden=true <CR>", "find all" },
-    ["<leader>fw"] = { "<cmd> Telescope live_grep <CR>", "live grep" },
-    ["<leader>fb"] = { "<cmd> Telescope buffers <CR>", "find buffers" },
-    ["<leader>fh"] = { "<cmd> Telescope help_tags <CR>", "help page" },
-    ["<leader>fo"] = { "<cmd> Telescope oldfiles <CR>", "find oldfiles" },
-    ["<leader>tk"] = { "<cmd> Telescope keymaps <CR>", "show keys" },
-
-    -- git
-    ["<leader>cm"] = { "<cmd> Telescope git_commits <CR>", "git commits" },
-    ["<leader>gt"] = { "<cmd> Telescope git_status <CR>", "git status" },
-
-    -- pick a hidden term
-    ["<leader>pt"] = { "<cmd> Telescope terms <CR>", "pick hidden term" },
-
-    -- theme switcher
-    ["<leader>th"] = { "<cmd> Telescope themes <CR>", "nvchad themes" },
-  },
-}
-
-M.nvterm = {
-  plugin = true,
-
-  t = {
-    -- toggle in terminal mode
-    ["<A-i>"] = {
-      function()
-        require("nvterm.terminal").toggle "float"
-      end,
-      "toggle floating term",
-    },
-
-    ["<A-h>"] = {
-      function()
-        require("nvterm.terminal").toggle "horizontal"
-      end,
-      "toggle horizontal term",
-    },
-
-    ["<A-v>"] = {
-      function()
-        require("nvterm.terminal").toggle "vertical"
-      end,
-      "toggle vertical term",
-    },
-  },
-
-  n = {
-    -- toggle in normal mode
-    ["<A-i>"] = {
-      function()
-        require("nvterm.terminal").toggle "float"
-      end,
-      "toggle floating term",
-    },
-
-    ["<A-h>"] = {
-      function()
-        require("nvterm.terminal").toggle "horizontal"
-      end,
-      "toggle horizontal term",
-    },
-
-    ["<A-v>"] = {
-      function()
-        require("nvterm.terminal").toggle "vertical"
-      end,
-      "toggle vertical term",
-    },
-
-    -- new
-
-    ["<leader>h"] = {
-      function()
-        require("nvterm.terminal").new "horizontal"
-      end,
-      "new horizontal term",
-    },
-
-    ["<leader>v"] = {
-      function()
-        require("nvterm.terminal").new "vertical"
-      end,
-      "new vertical term",
-    },
-  },
-}
-
-M.whichkey = {
-  plugin = true,
-
-  n = {
-    ["<leader>wK"] = {
-      function()
-        vim.cmd "WhichKey"
-      end,
-      "which-key all keymaps",
-    },
-    ["<leader>wk"] = {
-      function()
-        local input = vim.fn.input "WhichKey: "
-        vim.cmd("WhichKey " .. input)
-      end,
-      "which-key query lookup",
-    },
-  },
-}
-
-M.blankline = {
-  plugin = true,
-
-  n = {
-    ["<leader>cc"] = {
-      function()
-        local ok, start = require("indent_blankline.utils").get_current_context(
-          vim.g.indent_blankline_context_patterns,
-          vim.g.indent_blankline_use_treesitter_scope
-        )
-
-        if ok then
-          vim.api.nvim_win_set_cursor(vim.api.nvim_get_current_win(), { start, 0 })
-          vim.cmd [[normal! _]]
-        end
-      end,
-
-      "Jump to current_context",
-    },
-  },
-}
-
-return M
+keymap("t", "<C-x>", termcodes "<C-\\><C-N>", opts)

@@ -3,64 +3,18 @@ if not present then
   return
 end
 
-local M = {}
-local utils = require "core.utils"
+local servers = require "plugins.configs.lsp.servers"
+for server, options in pairs(servers) do
+  local opts = {
+    on_attach = require("plugins.configs.lsp.handlers").on_attach,
+    capabilities = require("plugins.configs.lsp.handlers").capabilities,
+  }
 
--- export on_attach & capabilities for custom lspconfigs
-
-M.on_attach = function(client, bufnr)
-  if vim.g.vim_version > 7 then
-    -- nightly
-    client.server_capabilities.documentFormattingProvider = false
-    client.server_capabilities.documentRangeFormattingProvider = false
-  else
-    -- stable
-    client.resolved_capabilities.document_formatting = false
-    client.resolved_capabilities.document_range_formatting = false
+  if options.type == "lsp" then
+    if options.has_setting then
+      lspconfig[server].setup(require("core.utils").load_lsp_settings(opts, server))
+    else
+      lspconfig[server].setup(opts)
+    end
   end
-
-  utils.load_mappings("lspconfig", { buffer = bufnr })
 end
-
-M.capabilities = vim.lsp.protocol.make_client_capabilities()
-
-M.capabilities.textDocument.completion.completionItem = {
-  documentationFormat = { "markdown", "plaintext" },
-  snippetSupport = true,
-  preselectSupport = true,
-  insertReplaceSupport = true,
-  labelDetailsSupport = true,
-  deprecatedSupport = true,
-  commitCharactersSupport = true,
-  tagSupport = { valueSet = { 1 } },
-  resolveSupport = {
-    properties = {
-      "documentation",
-      "detail",
-      "additionalTextEdits",
-    },
-  },
-}
-
-lspconfig.sumneko_lua.setup {
-  on_attach = M.on_attach,
-  capabilities = M.capabilities,
-
-  settings = {
-    Lua = {
-      diagnostics = {
-        globals = { "vim" },
-      },
-      workspace = {
-        library = {
-          [vim.fn.expand "$VIMRUNTIME/lua"] = true,
-          [vim.fn.expand "$VIMRUNTIME/lua/vim/lsp"] = true,
-        },
-        maxPreload = 100000,
-        preloadFileSize = 10000,
-      },
-    },
-  },
-}
-
-return M
