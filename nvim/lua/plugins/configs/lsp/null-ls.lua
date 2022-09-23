@@ -1,4 +1,4 @@
-local present, null_ls = pcall(require, "null-ls")
+    -- formatting.eslint,
 if not present then
   return
 end
@@ -9,14 +9,9 @@ local diagnostics = null_ls.builtins.diagnostics
 null_ls.setup {
   debug = false,
   sources = {
-    formatting.prettier.with {
-      extra_filetypes = { "toml", "solidity" },
-      extra_args = { "--no-semi", "--single-quote", "--jsx-single-quote" },
-    },
     formatting.black.with { extra_args = { "--fast" } },
     formatting.stylua,
     formatting.shfmt,
-    diagnostics.eslint,
     diagnostics.flake8,
     diagnostics.shellcheck,
   },
