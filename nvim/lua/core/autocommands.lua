@@ -153,3 +153,10 @@ autocmd({ "BufWritePost" }, {
     vim.lsp.buf.format { async = true }
   end,
 })
+
+autocmd({ "VimEnter" }, {
+  pattern = { "*" },
+  callback = function()
+    vim.cmd "cd $PWD"
+  end
+})
