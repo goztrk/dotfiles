@@ -22,13 +22,14 @@ dashboard.section.header.val = {
 }
 
 dashboard.section.buttons.val = {
-  button("f", "  Find File",   ":Telescope find_files<CR>"),
-  button("r", "  Recent File", ":Telescope oldfiles<CR>"),
-  button("w", "  Find Word",   ":Telescope live_grep<CR>"),
-  button("b", "  Bookmarks",   ":Telescope marks<CR>"),
-  button("c", "  Config",      ":e ~/.config/nvim/init.lua | :cd %:p:h <CR>"),
-  button("u", "痢 Update",      ":PackerSync<CR>"),
-  button("q", "  Close",       ":qa<CR>"),
+  button("f", "  Find File",    ":Telescope find_files<CR>"),
+  button("r", "  Recent File",  ":Telescope oldfiles<CR>"),
+  button("p", "  Find Project", ":lua require('telescope').extensions.projects.projects()<cr>"),
+  button("w", "  Find Word",    ":Telescope live_grep<CR>"),
+  button("b", "  Bookmarks",    ":Telescope marks<CR>"),
+  button("c", "  Config",       ":e ~/.config/nvim/init.lua | :cd %:p:h <CR>"),
+  button("u", "痢 Update",       ":PackerSync<CR>"),
+  button("q", "  Close",        ":qa<CR>"),
 }
 
 local function footer()

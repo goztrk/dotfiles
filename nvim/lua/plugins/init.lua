@@ -226,6 +226,12 @@ local plugins = {
 
   ["gpanders/editorconfig.nvim"] = {},
 
+  ["ahmedkhalf/project.nvim"] = {
+    config = function()
+      require "plugins.configs.project"
+    end,
+  },
+
   ["windwp/nvim-spectre"] = {
     config = function()
       require "plugins.configs.spectre"
@@ -235,6 +241,12 @@ local plugins = {
   ["stevearc/dressing.nvim"] = {
     config = function()
       require "plugins.configs.dressing"
+    end,
+  },
+
+  ["phaazon/hop.nvim"] = {
+    config = function()
+      require "plugins.configs.hop"
     end,
   },
 
