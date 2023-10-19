@@ -134,6 +134,7 @@ source $ZSH/oh-my-zsh.sh
 # else
 #   export EDITOR='mvim'
 # fi
+export EDITOR="nvim"
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -169,3 +170,6 @@ ssh-add > /dev/null 2>&1
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 [ -f "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"
+
+export FLYCTL_INSTALL="/home/goztrk/.fly"
+export PATH="$FLYCTL_INSTALL/bin:$PATH"
